@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Microsoft Edge - Windows 10</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
+    <!-- 配置Tailwind自定义颜色和字体 -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'edge-blue': '#0078D7',
+                        'edge-light': '#E8F0FE',
+                        'edge-dark': '#005A9E',
+                        'win-gray': '#F2F2F2',
+                        'win-border': '#DADCE0',
+                        'win-text': '#202124',
+                        'win-hover': '#E8EAED'
+                    },
+                    fontFamily: {
+                        'segoe': ['Segoe UI', 'Microsoft YaHei', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .tab-active {
+                @apply border-b-2 border-edge-blue text-edge-blue;
+            }
+            .toolbar-btn {
+                @apply flex items-center justify-center w-9 h-9 rounded hover:bg-win-hover transition-colors duration-100;
+            }
+            .url-bar-focus {
+                @apply border-edge-blue shadow-[0_0_0_1px_rgba(0,120,215,0.3)];
+            }
+        }
+    </style>
+</head>
+
+<body class="font-segoe bg-white text-win-text overflow-hidden h-screen flex flex-col">
+    <!-- 标签栏 -->
+    <div class="bg-white border-b border-win-border px-2 py-1 flex items-center overflow-x-auto" style="height: 32px;">
+        <div class="flex-shrink-0 flex items-center h-full px-3 tab-active">
+            <i class="fa fa-globe text-xs mr-2"></i>
+            <span class="text-sm truncate max-w-[180px]">Microsoft Edge 主页</span>
+            <button class="ml-2 text-xs opacity-60 hover:opacity-100">
+                <i class="fa fa-times"></i>
+            </button>
+        </div>
+        <div class="flex-shrink-0 flex items-center h-full px-3 hover:bg-win-hover cursor-pointer">
+            <i class="fa fa-plus text-xs"></i>
+        </div>
+    </div>
+
+    <!-- 工具栏和地址栏 -->
+    <div class="bg-win-gray px-3 py-2 flex items-center">
+        <div class="flex items-center space-x-1 mr-2">
+            <button class="toolbar-btn text-gray-600" title="后退">
+                <i class="fa fa-arrow-left text-xs"></i>
+            </button>
+            <button class="toolbar-btn text-gray-600" title="前进">
+                <i class="fa fa-arrow-right text-xs"></i>
+            </button>
+            <button class="toolbar-btn text-gray-600" title="刷新">
+                <i class="fa fa-refresh text-xs"></i>
+            </button>
+            <button class="toolbar-btn text-gray-600" title="主页">
+                <i class="fa fa-home text-xs"></i>
+            </button>
+        </div>
+
+        <!-- 地址栏 -->
+        <div class="flex-1 max-w-xl mx-2 relative">
+            <div class="flex items-center bg-white border border-win-border rounded-full px-4 py-1.5 url-bar-focus">
+                <div class="flex items-center mr-2 text-gray-500">
+                    <i class="fa fa-search text-xs mr-1"></i>
+                    <i class="fa fa-lock text-xs"></i>
+                </div>
+                <input type="text" value="https://www.microsoft.com/zh-cn/edge"
+                    class="flex-1 outline-none text-sm bg-transparent" />
+                <div class="flex items-center space-x-1">
+                    <button class="toolbar-btn text-gray-600 w-7 h-7">
+                        <i class="fa fa-microphone text-xs"></i>
+                    </button>
+                    <button class="toolbar-btn text-gray-600 w-7 h-7">
+                        <i class="fa fa-qrcode text-xs"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="flex items-center space-x-1 ml-2">
+            <button class="toolbar-btn text-gray-600" title="收藏夹">
+                <i class="fa fa-star-o text-xs"></i>
+            </button>
+            <button class="toolbar-btn text-gray-600" title="历史记录">
+                <i class="fa fa-history text-xs"></i>
+            </button>
+            <button class="toolbar-btn text-gray-600" title="下载">
+                <i class="fa fa-download text-xs"></i>
+            </button>
+            <button class="toolbar-btn text-gray-600" title="扩展">
+                <i class="fa fa-puzzle-piece text-xs"></i>
+            </button>
+            <button class="toolbar-btn text-gray-600" title="设置">
+                <i class="fa fa-ellipsis-v text-xs"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- 主要内容区域 -->
+    <div class="flex-1 overflow-auto bg-white">
+        <!-- Edge主页内容 -->
+        <div class="max-w-6xl mx-auto p-6">
+            <!-- 顶部快捷链接 -->
+            <div class="flex justify-between items-center mb-8">
+                <h1 class="text-xl font-semibold">欢迎使用 Microsoft Edge</h1>
+                <div class="flex items-center space-x-2">
+                    <button
+                        class="text-sm px-3 py-1 bg-edge-blue text-white rounded hover:bg-edge-dark transition-colors">
+                        自定义
+                    </button>
+                </div>
+            </div>
+
+            <!-- 搜索框 -->
+            <div class="max-w-2xl mx-auto mb-10">
+                <div
+                    class="border border-win-border rounded-full px-4 py-3 flex items-center hover:shadow-md transition-shadow">
+                    <i class="fa fa-search text-gray-400 mr-3"></i>
+                    <input type="text" placeholder="搜索网页、图片、视频等" class="flex-1 outline-none text-base" />
+                    <div class="flex items-center space-x-3">
+                        <button class="text-gray-500 hover:text-gray-700">
+                            <i class="fa fa-microphone"></i>
+                        </button>
+                        <button class="text-gray-500 hover:text-gray-700">
+                            <i class="fa fa-camera"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 快速访问 -->
+            <div class="mb-8">
+                <h2 class="text-lg font-medium mb-4">快速访问</h2>
+                <div class="grid grid-cols-6 gap-4">
+                    <!-- 快速访问项 -->
+                    <div class="flex flex-col items-center cursor-pointer group">
+                        <div
+                            class="w-16 h-16 rounded bg-edge-light flex items-center justify-center mb-2 group-hover:bg-edge-blue/20 transition-colors">
+                            <i class="fa fa-search text-edge-blue text-xl"></i>
+                        </div>
+                        <span class="text-sm text-center truncate w-full">必应搜索</span>
+                    </div>
+
+                    <div class="flex flex-col items-center cursor-pointer group">
+                        <div
+                            class="w-16 h-16 rounded bg-[#FFEBEE] flex items-center justify-center mb-2 group-hover:bg-[#FFCDD2]/50 transition-colors">
+                            <i class="fa fa-envelope text-[#D32F2F] text-xl"></i>
+                        </div>
+                        <span class="text-sm text-center truncate w-full"> Outlook</span>
+                    </div>
+
+                    <div class="flex flex-col items-center cursor-pointer group">
+                        <div
+                            class="w-16 h-16 rounded bg-[#E8F5E9] flex items-center justify-center mb-2 group-hover:bg-[#C8E6C9]/50 transition-colors">
+                            <i class="fa fa-file-text text-[#4CAF50] text-xl"></i>
+                        </div>
+                        <span class="text-sm text-center truncate w-full">Word 在线</span>
+                    </div>
+
+                    <div class="flex flex-col items-center cursor-pointer group">
+                        <div
+                            class="w-16 h-16 rounded bg-[#E3F2FD] flex items-center justify-center mb-2 group-hover:bg-[#BBDEFB]/50 transition-colors">
+                            <i class="fa fa-table text-[#1976D2] text-xl"></i>
+                        </div>
+                        <span class="text-sm text-center truncate w-full">Excel 在线</span>
+                    </div>
+
+                    <div class="flex flex-col items-center cursor-pointer group">
+                        <div
+                            class="w-16 h-16 rounded bg-[#F3E5F5] flex items-center justify-center mb-2 group-hover:bg-[#E1BEE7]/50 transition-colors">
+                            <i class="fa fa-picture-o text-[#8E24AA] text-xl"></i>
+                        </div>
+                        <span class="text-sm text-center truncate w-full">PowerPoint</span>
+                    </div>
+
+                    <div class="flex flex-col items-center cursor-pointer group">
+                        <div
+                            class="w-16 h-16 rounded border-2 border-dashed border-gray-300 flex items-center justify-center mb-2 group-hover:border-gray-400 transition-colors">
+                            <i class="fa fa-plus text-gray-400"></i>
+                        </div>
+                        <span class="text-sm text-center truncate w-full">添加</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 新闻资讯 -->
+            <div>
+                <h2 class="text-lg font-medium mb-4">为你推荐</h2>
+                <div class="grid grid-cols-2 gap-6">
+                    <div
+                        class="border border-win-border rounded-lg overflow-hidden hover:shadow-md transition-shadow cursor-pointer">
+                        <img src="https://picsum.photos/id/237/600/300" alt="新闻图片" class="w-full h-40 object-cover" />
+                        <div class="p-4">
+                            <h3 class="font-medium mb-1">Microsoft 发布全新 Edge 功能更新</h3>
+                            <p class="text-sm text-gray-600">包含全新的隐私保护功能和性能优化...</p>
+                        </div>
+                    </div>
+
+                    <div
+                        class="border border-win-border rounded-lg overflow-hidden hover:shadow-md transition-shadow cursor-pointer">
+                        <img src="https://picsum.photos/id/180/600/300" alt="新闻图片" class="w-full h-40 object-cover" />
+                        <div class="p-4">
+                            <h3 class="font-medium mb-1">如何使用 Edge 浏览器的工作区功能</h3>
+                            <p class="text-sm text-gray-600">提高工作效率的全新方式，轻松管理多个项目...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 状态栏 -->
+    <div class="bg-white border-t border-win-border px-4 py-1 text-xs text-gray-600 flex items-center justify-between">
+        <div>
+            <span>安全连接</span>
+            <span class="mx-2">•</span>
+            <span>https://www.microsoft.com</span>
+        </div>
+        <div class="flex items-center space-x-4">
+            <div>缩放: 100%</div>
+            <div>
+                <i class="fa fa-shield mr-1"></i>已保护
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 简单的交互效果
+        document.addEventListener('DOMContentLoaded', function () {
+            // 地址栏焦点效果
+            const urlInput = document.querySelector('input[value="https://www.microsoft.com/zh-cn/edge"]');
+            const urlBar = urlInput.parentElement;
+
+            urlInput.addEventListener('focus', function () {
+                urlBar.classList.add('url-bar-focus');
+            });
+
+            urlInput.addEventListener('blur', function () {
+                urlBar.classList.remove('url-bar-focus');
+            });
+
+            // 模拟导航按钮点击效果
+            const navButtons = document.querySelectorAll('.toolbar-btn');
+            navButtons.forEach(button => {
+                button.addEventListener('mousedown', function () {
+                    this.classList.add('bg-win-pressed');
+                });
+
+                button.addEventListener('mouseup', function () {
+                    this.classList.remove('bg-win-pressed');
+                });
+
+                button.addEventListener('mouseleave', function () {
+                    this.classList.remove('bg-win-pressed');
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>

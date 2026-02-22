@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Windows 10 For Web</title>
+    <link rel="stylesheet" href="StaticResources/style.css">
+    <link rel="shortcut icon" href="StaticResources/Icons/Windows_logo_-_2012.svg" type="image/x-icon">
+    <style>
+        .win-watermark {
+            position: fixed;
+            bottom: 48px;
+            right: 16px;
+            z-index: 999999;
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.75);
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            padding: 6px 14px;
+            pointer-events: auto;
+            user-select: none;
+            line-height: 1.5;
+            white-space: nowrap;
+            transition: background-color 0.2s;
+            letter-spacing: 0.3px;
+            font-weight: 400;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            opacity: 0.9;
+        }
+
+        .win-watermark a {
+            color: #b8e2ff;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+            margin-left: 4px;
+        }
+
+        .win-watermark a:hover {
+            color: #d4f0ff;
+            text-decoration: underline;
+        }
+
+        .watermark-dot {
+            width: 4px;
+            height: 4px;
+            background-color: rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            display: inline-block;
+            margin: 0 6px;
+        }
+
+        @media (max-width: 768px) {
+            .win-watermark {
+                font-size: 11px;
+                padding: 4px 10px;
+                bottom: 44px;
+                right: 8px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="win-app">
+        <div class="win-content" id="content">
+            <div class="selection-box" id="selectionBox"></div>
+
+            <div class="desktop-icons">
+                <div class="desktop-icon" draggable="true" data-name="this-pc">
+                    <img src="StaticResources/Icons/shell32_16.ico" alt="此电脑">
+                    <span>此电脑</span>
+                </div>
+                <div class="desktop-icon" draggable="true" data-name="control-panel">
+                    <img src="StaticResources/Icons/shell32_137.ico" alt="控制面板">
+                    <span>控制面板</span>
+                </div>
+                <div class="desktop-icon" draggable="true" data-name="recycle-bin">
+                    <img src="StaticResources/Icons/shell32_32.ico" alt="回收站">
+                    <span>回收站</span>
+                </div>
+                <div class="desktop-icon" draggable="true" data-name="edge" data-appUrl="app/edge.html">
+                    <img src="StaticResources/Icons/icons8-ms-边缘-新.svg" alt="Edge">
+                    <span>Edge</span>
+                </div>
+                <div class="desktop-icon" draggable="true" data-name="notepad" data-appUrl="app/system/notepad.html">
+                    <img src="StaticResources/Icons/notepad_2.ico" alt="记事本">
+                    <span>记事本</span>
+                </div>
+            </div>
+        </div>
+
+        <div id="win-start-menu">
+            <div id="win-start-menu-content">
+                <div class="win-nav-view" id="navView">
+                    <div class="win-nav-item">
+                        <div class="win-nav-item-icon"><img src="StaticResources/Icons/DefaultAccountTile.png" alt="">
+                        </div>
+                        <div class="win-nav-item-text">Admin</div>
+                    </div>
+                    <div class="win-nav-item">
+                        <div class="win-nav-item-icon"><img src="StaticResources/Icons/icons8-settings-512.svg" alt="">
+                        </div>
+                        <div class="win-nav-item-text">设置</div>
+                    </div>
+                    <div class="win-nav-item">
+                        <div class="win-nav-item-icon"><img src="StaticResources/Icons/shutdown--v1.png"
+                                alt="shutdown--v1" /></div>
+                        <div class="win-nav-item-text">电源</div>
+                    </div>
+                </div>
+                <div class="win-app-list"></div>
+                <div id="win-magneticPatch"></div>
+            </div>
+        </div>
+
+        <div class="win-taskbar">
+            <img src="StaticResources/Icons/Windows_logo_-_2012.svg" alt="Windows" id="windows">
+            <div class="win-textbox">
+                <input type="text" id="search" placeholder="搜索">
+            </div>
+            <img src="StaticResources/Icons/timeline.png" alt="timeline" id="timeline" class="hover-img">
+            <div id="win-list"></div>
+            <div class="win-system-tray">
+                <div class="win-tray-icon">
+                    <img src="StaticResources/Icons/icons8-audio-96.png" alt="音量">
+                </div>
+                <div class="win-tray-icon">
+                    <img src="StaticResources/Icons/icons8-有线网络连接-64.png" alt="网络">
+                </div>
+                <div id="win-clock" class="win-clock">
+                    <div class="win-time">00:00</div>
+                    <div class="win-date">0000/00/0</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="win-context-menu" id="contextMenu">
+        <div class="win-context-menu-item" data-callback="loadContent()">刷新</div>
+        <div class="win-context-menu-item">新建</div>
+        <div class="win-context-menu-item">打开</div>
+        <div class="win-context-menu-item">保存</div>
+        <div class="win-context-menu-separator"></div>
+        <div class="win-context-menu-item">剪切</div>
+        <div class="win-context-menu-item">复制</div>
+        <div class="win-context-menu-item">粘贴</div>
+        <div class="win-context-menu-separator"></div>
+        <div class="win-context-menu-item">属性</div>
+    </div>
+
+    <!-- 右下角水印 - 符合要求：显示作者和MIT开源链接 -->
+    <div class="win-watermark" title="开源项目: win10-html">
+        <span>该网站由小枫_QWQ制作</span>
+        <span class="watermark-dot"></span>
+        <a href="https://github.com/XiaoFeng-QWQ/win10-html" target="_blank" rel="noopener noreferrer">MIT开源在Github</a>
+    </div>
+
+    <script src="StaticResources/Js/jquery-3.7.1.min.js"></script>
+    <script src="StaticResources/Js/jquery-ui.min.js"></script>
+
+    <script src="StaticResources/Js/Manager/ClockManager.js"></script>
+    <script src="StaticResources/Js/Manager/ContextMenuManager.js"></script>
+    <script src="StaticResources/Js/Manager/DesktopManager.js"></script>
+    <script src="StaticResources/Js/Manager/StartMenuManager.js"></script>
+    <script src="StaticResources/Js/Manager/WindowManager.js"></script>
+
+    <script>
+        (function () {
+            $('.win-watermark').on('mousedown click', function (e) {
+                e.stopPropagation(); // 防止触发桌面拖拽或菜单
+            });
+        })();
+    </script>
+</body>
+
+</html>

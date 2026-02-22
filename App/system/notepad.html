@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>记事本</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            background-color: #fff;
+            color: #000;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .menu-bar {
+            display: flex;
+            background-color: #f0f0f0;
+            padding: 2px 0;
+            border-bottom: 1px solid #d9d9d9;
+            user-select: none;
+        }
+
+        .menu-item {
+            padding: 2px 10px;
+            cursor: default;
+        }
+
+        .menu-item:hover {
+            background-color: #e5f1fb;
+        }
+
+        .menu-item.active {
+            background-color: #cce4f7;
+        }
+
+        .menu-dropdown {
+            position: absolute;
+            background-color: #fff;
+            border: 1px solid #d9d9d9;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+            z-index: 100;
+            display: none;
+        }
+
+        .menu-dropdown-item {
+            padding: 4px 30px 4px 25px;
+            white-space: nowrap;
+            cursor: default;
+        }
+
+        .menu-dropdown-item:hover {
+            background-color: #e5f1fb;
+        }
+
+        .menu-dropdown-separator {
+            height: 1px;
+            background-color: #d9d9d9;
+            margin: 4px 0;
+        }
+
+        .menu-dropdown-shortcut {
+            float: right;
+            margin-left: 20px;
+            color: #666;
+        }
+
+        textarea {
+            border: none;
+            outline: none;
+            padding: 10px;
+            margin: 0;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            background-image: none;
+            background-color: transparent;
+            font-family: inherit;
+            font-size: inherit;
+            width: calc(100% - 20px);
+            height: calc(100% - 41px);
+            resize: none;
+            line-height: 1.5;
+        }
+
+        textarea:focus {
+            outline: none;
+        }
+
+        .status-bar {
+            background-color: #f0f0f0;
+            border-top: 1px solid #d9d9d9;
+            padding: 2px 10px;
+            font-size: 12px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        #file-input {
+            display: none;
+        }
+
+        #save-link {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="menu-bar">
+        <div class="menu-item" id="file-menu">文件(F)</div>
+        <div class="menu-item" id="edit-menu">编辑(E)</div>
+        <div class="menu-item" id="format-menu">格式(O)</div>
+        <div class="menu-item" id="view-menu">查看(V)</div>
+        <div class="menu-item" id="help-menu">帮助(H)</div>
+
+        <div class="menu-dropdown" id="file-dropdown">
+            <div class="menu-dropdown-item" id="new-file">新建<span class="menu-dropdown-shortcut">Ctrl+N</span></div>
+            <div class="menu-dropdown-item" id="open-file">打开<span class="menu-dropdown-shortcut">Ctrl+O</span></div>
+            <div class="menu-dropdown-item" id="save-file">保存<span class="menu-dropdown-shortcut">Ctrl+S</span></div>
+            <div class="menu-dropdown-item" id="save-as-file">另存为</div>
+            <div class="menu-dropdown-separator"></div>
+            <div class="menu-dropdown-item" id="page-setup">页面设置</div>
+            <div class="menu-dropdown-item" id="print-file">打印<span class="menu-dropdown-shortcut">Ctrl+P</span></div>
+            <div class="menu-dropdown-separator"></div>
+            <div class="menu-dropdown-item" id="exit">退出</div>
+        </div>
+
+        <div class="menu-dropdown" id="edit-dropdown">
+            <div class="menu-dropdown-item" id="undo">撤销<span class="menu-dropdown-shortcut">Ctrl+Z</span></div>
+            <div class="menu-dropdown-separator"></div>
+            <div class="menu-dropdown-item" id="cut">剪切<span class="menu-dropdown-shortcut">Ctrl+X</span></div>
+            <div class="menu-dropdown-item" id="copy">复制<span class="menu-dropdown-shortcut">Ctrl+C</span></div>
+            <div class="menu-dropdown-item" id="paste">粘贴<span class="menu-dropdown-shortcut">Ctrl+V</span></div>
+            <div class="menu-dropdown-item" id="delete">删除<span class="menu-dropdown-shortcut">Del</span></div>
+            <div class="menu-dropdown-separator"></div>
+            <div class="menu-dropdown-item" id="find">查找<span class="menu-dropdown-shortcut">Ctrl+F</span></div>
+            <div class="menu-dropdown-item" id="find-next">查找下一个<span class="menu-dropdown-shortcut">F3</span></div>
+            <div class="menu-dropdown-item" id="replace">替换<span class="menu-dropdown-shortcut">Ctrl+H</span></div>
+            <div class="menu-dropdown-item" id="go-to">转到<span class="menu-dropdown-shortcut">Ctrl+G</span></div>
+            <div class="menu-dropdown-separator"></div>
+            <div class="menu-dropdown-item" id="select-all">全选<span class="menu-dropdown-shortcut">Ctrl+A</span></div>
+            <div class="menu-dropdown-item" id="time-date">时间/日期<span class="menu-dropdown-shortcut">F5</span></div>
+        </div>
+
+        <div class="menu-dropdown" id="format-dropdown">
+            <div class="menu-dropdown-item" id="word-wrap">自动换行</div>
+            <div class="menu-dropdown-item" id="font">字体...</div>
+        </div>
+
+        <div class="menu-dropdown" id="view-dropdown">
+            <div class="menu-dropdown-item" id="zoom-in">放大<span class="menu-dropdown-shortcut">Ctrl+加号</span></div>
+            <div class="menu-dropdown-item" id="zoom-out">缩小<span class="menu-dropdown-shortcut">Ctrl+减号</span></div>
+            <div class="menu-dropdown-item" id="restore-zoom">恢复默认缩放<span class="menu-dropdown-shortcut">Ctrl+0</span>
+            </div>
+            <div class="menu-dropdown-separator"></div>
+            <div class="menu-dropdown-item" id="status-bar">状态栏</div>
+        </div>
+
+        <div class="menu-dropdown" id="help-dropdown">
+            <div class="menu-dropdown-item" id="view-help">查看帮助</div>
+            <div class="menu-dropdown-item" id="about-notepad">关于记事本</div>
+        </div>
+    </div>
+
+    <textarea id="editor" spellcheck="false"></textarea>
+
+    <div class="status-bar" id="status-bar">
+        <div id="line-col-info">第1行, 第1列</div>
+        <div id="encoding-info">UTF-8</div>
+    </div>
+
+    <input type="file" id="file-input" accept=".txt,.text,.log,.md,.html,.js,.css,.json,.xml">
+    <a id="save-link" style="display:none"></a>
+
+    <script>
+        // 获取DOM元素
+        const editor = document.getElementById('editor');
+        const fileInput = document.getElementById('file-input');
+        const saveLink = document.getElementById('save-link');
+        const statusBar = document.getElementById('status-bar');
+        const lineColInfo = document.getElementById('line-col-info');
+        const encodingInfo = document.getElementById('encoding-info');
+
+        // 菜单相关元素
+        const menuItems = document.querySelectorAll('.menu-item');
+        const dropdowns = document.querySelectorAll('.menu-dropdown');
+
+        // 当前文件信息
+        let currentFile = null;
+        let isModified = false;
+        let fontSize = 16;
+        let isWordWrap = false;
+        let isStatusBarVisible = true;
+
+        // 初始化编辑器
+        function initEditor() {
+            // 设置默认字体
+            editor.style.fontFamily = 'Consolas, Monaco, "Courier New", monospace';
+            editor.style.fontSize = fontSize + 'px';
+
+            // 监听内容变化
+            editor.addEventListener('input', function () {
+                isModified = true;
+                updateLineColInfo();
+            });
+
+            // 监听光标位置变化
+            editor.addEventListener('click', updateLineColInfo);
+            editor.addEventListener('keyup', updateLineColInfo);
+
+            // 初始化菜单事件
+            initMenu();
+
+            // 初始化快捷键
+            initShortcuts();
+
+            // 更新状态栏
+            updateLineColInfo();
+        }
+
+        // 初始化菜单
+        function initMenu() {
+            // 显示/隐藏下拉菜单
+            menuItems.forEach(item => {
+                item.addEventListener('click', function (e) {
+                    const dropdownId = this.id.replace('-menu', '-dropdown');
+                    const dropdown = document.getElementById(dropdownId);
+
+                    // 隐藏所有下拉菜单
+                    dropdowns.forEach(d => {
+                        if (d.id !== dropdownId) d.style.display = 'none';
+                    });
+
+                    // 切换当前下拉菜单
+                    if (dropdown.style.display === 'block') {
+                        dropdown.style.display = 'none';
+                        this.classList.remove('active');
+                    } else {
+                        dropdown.style.display = 'block';
+                        this.classList.add('active');
+
+                        // 定位下拉菜单
+                        const rect = this.getBoundingClientRect();
+                        dropdown.style.left = rect.left + 'px';
+                        dropdown.style.top = rect.bottom + 'px';
+                    }
+
+                    e.stopPropagation();
+                });
+            });
+
+            // 点击其他地方隐藏菜单
+            document.addEventListener('click', function () {
+                dropdowns.forEach(d => d.style.display = 'none');
+                menuItems.forEach(item => item.classList.remove('active'));
+            });
+
+            // 文件菜单功能
+            document.getElementById('new-file').addEventListener('click', newFile);
+            document.getElementById('open-file').addEventListener('click', openFile);
+            document.getElementById('save-file').addEventListener('click', saveFile);
+            document.getElementById('save-as-file').addEventListener('click', saveAsFile);
+            document.getElementById('print-file').addEventListener('click', printFile);
+            document.getElementById('exit').addEventListener('click', exitApp);
+
+            // 编辑菜单功能
+            document.getElementById('undo').addEventListener('click', undo);
+            document.getElementById('cut').addEventListener('click', cut);
+            document.getElementById('copy').addEventListener('click', copy);
+            document.getElementById('paste').addEventListener('click', paste);
+            document.getElementById('delete').addEventListener('click', deleteText);
+            document.getElementById('select-all').addEventListener('click', selectAll);
+            document.getElementById('time-date').addEventListener('click', insertTimeDate);
+            document.getElementById('find').addEventListener('click', findText);
+            document.getElementById('replace').addEventListener('click', replaceText);
+
+            // 格式菜单功能
+            document.getElementById('word-wrap').addEventListener('click', toggleWordWrap);
+            document.getElementById('font').addEventListener('click', changeFont);
+
+            // 查看菜单功能
+            document.getElementById('zoom-in').addEventListener('click', zoomIn);
+            document.getElementById('zoom-out').addEventListener('click', zoomOut);
+            document.getElementById('restore-zoom').addEventListener('click', restoreZoom);
+            document.getElementById('status-bar').addEventListener('click', toggleStatusBar);
+
+            // 帮助菜单功能
+            document.getElementById('view-help').addEventListener('click', viewHelp);
+            document.getElementById('about-notepad').addEventListener('click', showAbout);
+        }
+
+        // 初始化快捷键
+        function initShortcuts() {
+            document.addEventListener('keydown', function (e) {
+                // 检查是否按下了Ctrl键
+                const ctrlKey = e.ctrlKey || e.metaKey;
+
+                // 文件操作
+                if (ctrlKey) {
+                    switch (e.key.toLowerCase()) {
+                        case 'n': e.preventDefault(); newFile(); break;
+                        case 'o': e.preventDefault(); openFile(); break;
+                        case 's': e.preventDefault(); saveFile(); break;
+                        case 'p': e.preventDefault(); printFile(); break;
+                        case 'z': e.preventDefault(); undo(); break;
+                        case 'x': e.preventDefault(); cut(); break;
+                        case 'c': e.preventDefault(); copy(); break;
+                        case 'v': e.preventDefault(); paste(); break;
+                        case 'a': e.preventDefault(); selectAll(); break;
+                        case 'f': e.preventDefault(); findText(); break;
+                        case 'h': e.preventDefault(); replaceText(); break;
+                        case '0': e.preventDefault(); restoreZoom(); break;
+                        case '=':
+                        case '+':
+                            if (e.shiftKey) {
+                                e.preventDefault();
+                                zoomIn();
+                            }
+                            break;
+                        case '-': e.preventDefault(); zoomOut(); break;
+                    }
+                }
+
+                // 其他快捷键
+                switch (e.key) {
+                    case 'F3': e.preventDefault(); findNext(); break;
+                    case 'F5': e.preventDefault(); insertTimeDate(); break;
+                    case 'Delete': e.preventDefault(); deleteText(); break;
+                }
+            });
+        }
+
+        // 文件操作函数
+        function newFile() {
+            if (isModified) {
+                if (confirm('是否保存对当前文件的更改?')) {
+                    saveFile();
+                }
+            }
+            editor.value = '';
+            currentFile = null;
+            isModified = false;
+            updateTitle();
+        }
+
+        function openFile() {
+            fileInput.click();
+        }
+
+        fileInput.addEventListener('change', function (e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                editor.value = e.target.result;
+                currentFile = file;
+                isModified = false;
+                updateTitle();
+            };
+            reader.readAsText(file);
+        });
+
+        function saveFile() {
+            if (currentFile) {
+                saveToFile(currentFile.name, editor.value);
+            } else {
+                saveAsFile();
+            }
+        }
+
+        function saveAsFile() {
+            const blob = new Blob([editor.value], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+
+            saveLink.href = url;
+            saveLink.download = currentFile ? currentFile.name : '无标题.txt';
+            saveLink.click();
+
+            isModified = false;
+            updateTitle();
+        }
+
+        function saveToFile(filename, content) {
+            const blob = new Blob([content], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+
+            saveLink.href = url;
+            saveLink.download = filename;
+            saveLink.click();
+
+            isModified = false;
+            updateTitle();
+        }
+
+        function printFile() {
+            window.print();
+        }
+
+        function exitApp() {
+            if (isModified) {
+                if (confirm('是否保存对当前文件的更改?')) {
+                    saveFile();
+                }
+            }
+            window.close();
+        }
+
+        // 编辑操作函数
+        function undo() {
+            document.execCommand('undo', false, null);
+        }
+
+        function cut() {
+            document.execCommand('cut', false, null);
+        }
+
+        function copy() {
+            document.execCommand('copy', false, null);
+        }
+
+        function paste() {
+            document.execCommand('paste', false, null);
+        }
+
+        function deleteText() {
+            const start = editor.selectionStart;
+            const end = editor.selectionEnd;
+
+            if (start === end) {
+                // 删除光标后的一个字符
+                editor.value = editor.value.substring(0, start) + editor.value.substring(end + 1);
+            } else {
+                // 删除选中的文本
+                editor.value = editor.value.substring(0, start) + editor.value.substring(end);
+            }
+
+            editor.selectionStart = start;
+            editor.selectionEnd = start;
+            isModified = true;
+        }
+
+        function selectAll() {
+            editor.select();
+        }
+
+        function insertTimeDate() {
+            const now = new Date();
+            const timeDateStr = now.toLocaleString();
+
+            const start = editor.selectionStart;
+            editor.value = editor.value.substring(0, start) + timeDateStr + editor.value.substring(start);
+
+            editor.selectionStart = start + timeDateStr.length;
+            editor.selectionEnd = start + timeDateStr.length;
+            isModified = true;
+        }
+
+        function findText() {
+            const searchText = prompt('查找内容:');
+            if (searchText) {
+                const index = editor.value.indexOf(searchText);
+                if (index >= 0) {
+                    editor.selectionStart = index;
+                    editor.selectionEnd = index + searchText.length;
+                    editor.focus();
+                } else {
+                    alert('找不到 "' + searchText + '"');
+                }
+            }
+        }
+
+        function findNext() {
+            // 简化版查找下一个
+            alert('查找下一个功能');
+        }
+
+        function replaceText() {
+            const searchText = prompt('查找内容:');
+            if (searchText) {
+                const replaceText = prompt('替换为:');
+                if (replaceText !== null) {
+                    editor.value = editor.value.replace(new RegExp(searchText, 'g'), replaceText);
+                    isModified = true;
+                }
+            }
+        }
+
+        // 格式操作函数
+        function toggleWordWrap() {
+            isWordWrap = !isWordWrap;
+            editor.style.whiteSpace = isWordWrap ? 'pre-wrap' : 'pre';
+            document.getElementById('word-wrap').style.fontWeight = isWordWrap ? 'bold' : 'normal';
+        }
+
+        function changeFont() {
+            const fontFamily = prompt('字体:', editor.style.fontFamily);
+            if (fontFamily) {
+                editor.style.fontFamily = fontFamily;
+            }
+
+            const fontSize = prompt('字号:', parseInt(editor.style.fontSize));
+            if (fontSize) {
+                editor.style.fontSize = fontSize + 'px';
+            }
+        }
+
+        // 查看操作函数
+        function zoomIn() {
+            fontSize += 2;
+            editor.style.fontSize = fontSize + 'px';
+        }
+
+        function zoomOut() {
+            fontSize = Math.max(8, fontSize - 2);
+            editor.style.fontSize = fontSize + 'px';
+        }
+
+        function restoreZoom() {
+            fontSize = 16;
+            editor.style.fontSize = fontSize + 'px';
+        }
+
+        function toggleStatusBar() {
+            isStatusBarVisible = !isStatusBarVisible;
+            statusBar.style.display = isStatusBarVisible ? 'flex' : 'none';
+            document.getElementById('status-bar').style.fontWeight = isStatusBarVisible ? 'bold' : 'normal';
+        }
+
+        // 帮助操作函数
+        function viewHelp() {
+            alert('帮助文档');
+        }
+
+        function showAbout() {
+            alert('记事本\n版本 1.0\n© 2023');
+        }
+
+        // 更新函数
+        function updateTitle() {
+            const title = (currentFile ? currentFile.name : '无标题') + (isModified ? ' *' : '') + ' - 记事本';
+            document.title = title;
+        }
+
+        function updateLineColInfo() {
+            const text = editor.value.substring(0, editor.selectionStart);
+            const lines = text.split('\n');
+            const line = lines.length;
+            const col = lines[lines.length - 1].length + 1;
+
+            lineColInfo.textContent = `第${line}行, 第${col}列`;
+        }
+
+        // 初始化应用
+        initEditor();
+    </script>
+</body>
+
+</html>

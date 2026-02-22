@@ -1,0 +1,807 @@
+/* Windows 10 经典风格变量 */
+:root {
+    --win-accent: #0078D7;
+    --win-accent-light: #E5F1FB;
+    --win-text-primary: #000000;
+    --win-text-secondary: #666666;
+    --win-background: #F2F2F2;
+    --win-panel: rgba(255, 255, 255);
+    --win-border: #D9D9D9;
+    --win-border-accent: #0078D7;
+    --win-hover: rgba(229, 229, 229, 0.6);
+    --win-pressed: #CCCCCC;
+    --win-disabled: #F2F2F2;
+    --win-disabled-text: #A6A6A6;
+    --win-nav-view-width: 49px;
+    --acrylic-blur: 30px;
+    --acrylic-opacity: 0.6;
+}
+
+/* 基础毛玻璃效果类 */
+.acrylic-effect {
+    position: relative;
+    background-color: rgba(255, 255, 255, calc(var(--acrylic-opacity) - 0.3));
+    backdrop-filter: blur(var(--acrylic-blur));
+    -webkit-backdrop-filter: blur(var(--acrylic-blur));
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+    overflow: hidden;
+    z-index: 1;
+}
+
+/* 基础样式 */
+body {
+    font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+    font-size: 14px;
+    background-color: var(--win-background);
+    color: var(--win-text-primary);
+    margin: 0;
+    padding: 0;
+    line-height: 1.5;
+    transition: all 0.2s linear;
+    background-attachment: fixed;
+    background-size: cover;
+    background-image: url(Images/background_2012-2021\ \(light\ blue\).webp);
+    background-position: center;
+    background-size: cover;
+    overflow: hidden;
+}
+
+* {
+    user-select: none;
+    font-size: 12px;
+}
+
+/* 布局 */
+.win-app {
+    display: flex;
+    min-height: 100dvh;
+}
+
+/* 内容区域 */
+.win-content {
+    flex: 1;
+    min-height: calc(100dvh - 48px);
+    padding: 20px;
+}
+
+.win-panel {
+    background-color: var(--win-panel);
+    padding: 20px;
+    margin-bottom: 20px;
+    border: 1px solid var(--win-border);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    max-width: 800px;
+}
+
+/* 分隔线 */
+.win-separator {
+    height: 1px;
+    background-color: var(--win-border);
+    margin: 12px 0;
+}
+
+/* 桌面图标样式 */
+.desktop-icons {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 48px;
+    padding: 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 80px);
+    grid-auto-rows: 100px;
+    gap: 20px;
+    align-content: start;
+    z-index: 0;
+    background-size: 80px 100px;
+    background-position: 20px 20px;
+}
+
+/* 添加网格对齐辅助线样式 */
+.grid-guide {
+    position: absolute;
+    z-index: 999;
+    pointer-events: none;
+    display: none;
+}
+
+.grid-guide.vertical {
+    width: 1px;
+    height: 100%;
+}
+
+.grid-guide.horizontal {
+    height: 1px;
+    width: 100%;
+}
+
+.desktop-icon {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 80px;
+    height: 100px;
+    cursor: pointer;
+    user-select: none;
+    padding: 5px;
+    box-sizing: border-box;
+    position: absolute;
+    /* 为拖动做准备 */
+}
+
+/* 桌面图标图片样式 */
+.desktop-icon img {
+    width: 32px;
+    /* 调整为标准Windows图标大小 */
+    height: 32px;
+    margin-bottom: 8px;
+    object-fit: contain;
+    /* 保持图标比例 */
+}
+
+/* 图标文字样式 */
+.desktop-icon span {
+    text-align: center;
+    color: white;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+    word-break: keep-all;
+    /* 防止文字换行 */
+    white-space: nowrap;
+    /* 单行显示 */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 80px;
+    padding: 0 2px;
+}
+
+.desktop-icon:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.selection-box {
+    position: absolute;
+    background-color: rgba(0, 120, 215, 0.2);
+    border: 1px solid var(--win-accent);
+    z-index: 500;
+    pointer-events: none;
+}
+
+/* 更新图标选中样式 */
+.desktop-icon.selected {
+    background-color: rgba(0, 120, 215, 0.3);
+}
+
+/* 任务栏 */
+.win-taskbar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 40px;
+    background-color: rgba(255, 255, 255, var(--acrylic-opacity));
+    backdrop-filter: blur(var(--acrylic-blur));
+    display: flex;
+    align-items: center;
+    z-index: 9999999999;
+    padding: 0 2px;
+}
+
+/* 系统托盘样式 */
+.win-system-tray {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    margin-left: auto;
+    padding-right: 10px;
+}
+
+.win-tray-icon {
+    padding: 0 5px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.win-tray-icon img {
+    width: 16px;
+    height: 16px;
+    opacity: 0.8;
+    transition: opacity 0.2s;
+}
+
+.win-tray-icon:hover img {
+    opacity: 1;
+}
+
+/* 时钟样式 */
+.win-clock {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0 10px;
+    cursor: pointer;
+    font-family: 'Segoe UI', sans-serif;
+    user-select: none;
+}
+
+.win-time {
+    line-height: 1.2;
+}
+
+.win-date {
+    font-size: 10px;
+    line-height: 1.2;
+    opacity: 0.8;
+}
+
+.win-clock:hover {
+    background-color: var(--win-hover);
+}
+
+/* 时钟弹出面板 */
+.win-clock-panel {
+    position: absolute;
+    bottom: 40px;
+    right: 0;
+    width: 300px;
+    height: 0;
+    /* 初始高度为0 */
+    background-color: rgba(255, 255, 255, var(--acrylic-opacity));
+    backdrop-filter: blur(var(--acrylic-blur));
+    -webkit-backdrop-filter: blur(var(--acrylic-blur));
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    /* 初始时上下padding为0 */
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(20px);
+    transition:
+        height 0.3s cubic-bezier(0.1, 0.9, 0.2, 1),
+        opacity 0.2s ease-out,
+        transform 0.2s ease-out,
+        padding 0.3s cubic-bezier(0.1, 0.9, 0.2, 1);
+    z-index: 1001;
+    border: 1px solid var(--win-border);
+    border-bottom: none;
+    width: 350px;
+}
+
+.win-clock-panel hr {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    width: 100%;
+    color: var(--win-background);
+}
+
+.win-clock-panel.active {
+    height: calc(100dvh - 8dvh);
+    opacity: 1;
+    transform: translateY(0);
+    /* 激活时恢复padding */
+}
+
+/* 日历内容初始隐藏，等动画完成后再显示 */
+.win-calendar {
+    opacity: 0;
+    transition: opacity 0.1s ease-out 0.2s;
+    /* 延迟显示内容 */
+}
+
+.win-clock-panel.active .win-calendar {
+    opacity: 1;
+}
+
+.win-calendar {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    /*! margin: 15px; */
+}
+
+.win-calendar-time-main,
+.win-calendar-seconds,
+.win-calendar-minutes,
+.win-calendar-hours {
+    font-size: 4rem;
+    font-weight: 100;
+}
+
+.win-calendar-time {
+    padding-left: 15px;
+}
+
+.win-calendar-date-row {
+    color: var(--win-accent);
+    padding-left: 15px;
+}
+
+.win-calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.win-calendar-title {
+    font-size: 14px;
+    padding-left: 15px;
+}
+
+.win-calendar-nav {
+    display: flex;
+}
+
+.win-calendar-nav button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 2px 5px;
+}
+
+.win-calendar-weekdays {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    text-align: center;
+    font-size: 10px;
+    margin-bottom: -10px;
+    margin-left: 15px;
+    margin-right: 15px;
+}
+
+.win-calendar-days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    grid-auto-rows: 30px;
+    gap: 2px;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    margin: 15px;
+}
+
+.win-calendar-days.slide-out-up {
+    opacity: 0;
+    transform: translateY(-15px);
+}
+
+.win-calendar-days.slide-out-down {
+    opacity: 0;
+    transform: translateY(15px);
+}
+
+.win-calendar-days.slide-in {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.win-calendar-day {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    cursor: pointer;
+}
+
+.win-calendar-day:hover {
+    border: solid var(--win-hover) 3px;
+}
+
+.win-calendar-day.today {
+    background-color: var(--win-accent);
+    color: white;
+}
+
+.win-calendar-day.active {
+    border: solid var(--win-accent) 3px;
+}
+
+.win-calendar-day.other-month {
+    opacity: 0.5;
+}
+
+#windows,
+#timeline {
+    cursor: pointer;
+    max-width: 100%;
+    max-height: 50%;
+    padding-right: 14px;
+    padding-left: 10px;
+}
+
+#windows:hover {
+    background-color: var(--win-hover);
+}
+
+#search {
+    padding-left: 30px;
+    background-image: url('icons/icons8-搜索-512.svg');
+    background-repeat: no-repeat;
+    background-position: 8px center;
+    background-size: 16px;
+}
+
+.win-taskbar-item {
+    height: 100%;
+    padding: 0 12px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    position: relative;
+    transition: background-color 0.3s, border-bottom 0.2s;
+}
+
+.win-taskbar-item:hover {
+    background-color: var(--win-hover);
+}
+
+.win-taskbar-item.active::before {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background-color: var(--win-accent);
+}
+
+.win-taskbar-item img {
+    height: 24px;
+    width: 24px;
+}
+
+/* 文本框样式 */
+.win-textbox {
+    height: 100%;
+    width: 12dvw;
+}
+
+.win-textbox input {
+    padding: 8px 8px;
+    height: 100%;
+    border: 1px solid var(--win-border);
+    background-color: var(--win-panel);
+    color: var(--win-text-primary);
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 14px;
+    box-sizing: border-box;
+    width: 100%;
+}
+
+.win-textbox input:focus {
+    border-color: var(--win-accent);
+    outline: none;
+}
+
+.win-textbox input:disabled {
+    background-color: var(--win-disabled);
+    color: var(--win-disabled-text);
+}
+
+/* 开始菜单整体样式 */
+#win-start-menu {
+    position: absolute;
+    bottom: 40px;
+    left: 0;
+    width: 645px;
+    max-height: 0;
+    background-color: rgba(255, 255, 255, var(--acrylic-opacity));
+    backdrop-filter: blur(var(--acrylic-blur));
+    -webkit-backdrop-filter: blur(var(--acrylic-blur));
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+    z-index: 999;
+    transform-origin: bottom left;
+    opacity: 0;
+    transition: max-height 0.3s;
+}
+
+#win-start-menu.active {
+    opacity: 1;
+    height: calc(100dvh - 15dvh);
+    max-height: calc(100dvh - 15dvh);
+    /* 确保内容可以滚动 */
+    overflow-y: auto;
+}
+
+#win-start-menu-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    overflow: hidden;
+}
+
+/* 导航栏样式 */
+.win-nav-view {
+    width: var(--win-nav-view-width);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    justify-content: flex-end;
+    transition: all 0.1s ease-out;
+    position: absolute;
+    left: 0;
+    z-index: 10;
+}
+
+.win-nav-view:hover {
+    width: 200px;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+    background-color: var(--win-panel);
+}
+
+.win-nav-item {
+    width: 100%;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    position: relative;
+    transition: background-color 0.1s;
+    overflow: hidden;
+}
+
+.win-nav-item:hover {
+    background-color: var(--win-hover);
+}
+
+.win-nav-item-icon {
+    min-width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.win-nav-item-icon img {
+    max-height: 40%;
+}
+
+.win-nav-item-text {
+    white-space: nowrap;
+    display: flex;
+    margin-left: 10px;
+}
+
+/* 应用列表 */
+.win-app-list {
+    padding-top: 10px;
+    padding-left: 55px;
+    overflow-y: auto;
+    display: grid;
+    gap: 10px;
+    align-content: start;
+}
+
+.win-app-item {
+    display: flex;
+    align-items: center;
+    padding: 8px 12px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.win-app-item:hover {
+    background-color: var(--win-hover);
+}
+
+.win-app-item img {
+    width: 32px;
+    height: 32px;
+    margin-right: 12px;
+}
+
+/* 磁贴区域 */
+#win-magneticPatch {
+    padding: 10px;
+    overflow-y: auto;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-auto-rows: 120px;
+    gap: 10px;
+}
+
+.win-tile {
+    background-color: var(--win-hover);
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    box-sizing: border-box;
+    padding: 20px;
+    overflow: hidden;
+}
+
+.win-tile:hover {
+    border: 2px solid;
+}
+
+.win-tile.wide {
+    grid-column: span 2;
+}
+
+.win-tile.large {
+    grid-row: span 2;
+    grid-column: span 2;
+}
+
+.win-tile-icon {
+    font-size: 24px;
+    margin-bottom: 8px;
+    max-width: 100%;
+    max-height: 100%;
+}
+
+.win-tile-text {
+
+    text-align: center;
+    word-break: break-word;
+    color: black;
+}
+
+/* 右键菜单 */
+.win-context-menu {
+    position: fixed;
+    min-width: 160px;
+    background-color: var(--win-panel);
+    border: 1px solid var(--win-border);
+    box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    display: none;
+}
+
+.win-context-menu-item {
+    cursor: pointer;
+    padding: 6px 25px;
+    color: var(--win-text-primary);
+    transition: background-color 0.1s;
+}
+
+.win-context-menu-item:hover {
+    background-color: var(--win-hover);
+}
+
+.win-context-menu-separator {
+    height: 1px;
+    background-color: var(--win-border);
+    margin: 4px 0;
+}
+
+/* 窗口样式 */
+.win-window {
+    background-color: var(--win-panel);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.window-count {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background: #0078d7;
+    color: white;
+    border-radius: 50%;
+    width: 16px;
+    height: 16px;
+    font-size: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.win-window-titlebar {
+    color: black;
+    padding: 8px 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: move;
+    user-select: none;
+}
+
+.win-window-title {
+    font-weight: bold;
+}
+
+.win-window-controls {
+    display: flex;
+    gap: 8px;
+}
+
+.win-window-controls button {
+    background: none;
+    border: none;
+    color: black;
+    cursor: pointer;
+    font-size: 10px;
+    line-height: 1;
+    padding: 0;
+    width: 16px;
+    height: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* 任务栏项目样式 */
+#win-list {
+    align-items: center;
+    flex-grow: 1;
+    display: flex;
+    gap: 4px;
+    height: 100%;
+}
+
+.win-taskbar-item {
+    display: flex;
+    align-items: center;
+    padding: 0 12px;
+    height: 100%;
+    cursor: pointer;
+    position: relative;
+}
+
+.win-taskbar-item img {
+    height: 24px;
+    width: 24px;
+}
+
+.win-taskbar-item.active {
+    background-color: rgba(255, 255, 255, 0.2);
+    border-bottom: 2px solid #0078d7;
+}
+
+.win-taskbar-item .taskbar-item-title {
+    margin-left: 8px;
+    display: none;
+    /* 默认只显示图标 */
+}
+
+/* 鼠标悬停时显示完整名称 */
+.win-taskbar-item:hover .taskbar-item-title {
+    display: inline;
+}
+
+.win-window-controls button:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.win-window-content {
+    flex: 1;
+    overflow: hidden;
+}
+
+/* 最小化状态 */
+.win-window.minimized {
+    display: none;
+}
+
+/* 全屏窗口样式 */
+.win-window.fullscreen {
+    position: fixed !important;
+    left: 0 !important;
+    top: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    z-index: 10000 !important;
+}
+
+/* 响应式调整 */
+@media (max-width: 768px) {
+    #win-start-menu {
+        width: 100%;
+        grid-template-columns: 48px 1fr;
+    }
+
+    #win-magneticPatch {
+        grid-template-columns: repeat(2, 1fr);
+        grid-auto-rows: 100px;
+    }
+}
