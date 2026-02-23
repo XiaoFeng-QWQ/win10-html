@@ -675,7 +675,7 @@ function openFile(item) {
         // 打开记事本
         window.parent.WindowManager.openApp({
             name: 'Notepad',
-            url: '/app/system/notepad.html?file_content=SGVsbG8gV29ybGQh&file_name=我的文档.txt',
+            url: '/App/system/notepad.html?file_content=SGVsbG8gV29ybGQh&file_name=我的文档.txt',
             icon: '/StaticResources/Icons/notepad_2.ico'
         });
     } else if (item.type === 'jpg' || item.type === 'png') {
