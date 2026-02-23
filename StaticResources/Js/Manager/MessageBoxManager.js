@@ -254,11 +254,11 @@ const MessageBoxManager = {
         const messageBoxId = messageBox.id;
 
         // 确定图标
-        let iconSrc = 'StaticResources/Icons/info.png';
+        let iconSrc = 'StaticResources/Icons/info.ico';
         if (config.icon && config.icon !== this.icons.NONE) {
             switch (config.icon) {
                 case this.icons.info:
-                    iconSrc = 'StaticResources/Icons/info.png';
+                    iconSrc = 'StaticResources/Icons/info.ico';
                     break;
                 case this.icons.warning:
                     iconSrc = 'StaticResources/Icons/warning.png';
@@ -270,7 +270,7 @@ const MessageBoxManager = {
                     iconSrc = 'StaticResources/Icons/question.png';
                     break;
                 case this.icons.success:
-                    iconSrc = 'StaticResources/Icons/info.png';
+                    iconSrc = 'StaticResources/Icons/info.ico';
                     break;
             }
         }
@@ -783,7 +783,7 @@ const MessageBoxManager = {
      */
     _getIconPath: function (iconType) {
         const iconMap = {
-            [this.icons.info]: 'StaticResources/Icons/info.png',
+            [this.icons.info]: 'StaticResources/Icons/info.ico',
             [this.icons.warning]: 'StaticResources/Icons/warning.png',
             [this.icons.error]: 'StaticResources/Icons/error.ico',
             [this.icons.question]: 'StaticResources/Icons/question.png',

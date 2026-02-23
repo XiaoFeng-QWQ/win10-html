@@ -56,7 +56,7 @@ const fileSystem = {
         id: 'music',
         name: '音乐',
         type: 'folder',
-        icon: 'music.png',
+        icon: 'music.ico',
         children: ['song1.mp3', 'song2.mp3', 'playlist.m3u', 'album.flac']
     },
     'videos': {
