@@ -1,3 +1,5 @@
+"use strict";
+
 /**
  * 窗口管理器组件
  */
@@ -31,7 +33,7 @@ const WindowManager = {
         const windowHtml = `
                 <div class="win-window" id="${windowId}" data-app="${options.appName}">
                     <div class="win-window-titlebar">
-                        <div class="win-window-title"><img src=""> ${options.title}</div>
+                        <div class="win-window-title">${options.title}</div>
                         <div class="win-window-controls">
                             <button class="win-window-minimize">🗕</button>
                             <button class="win-window-maximize">🗗</button>
@@ -331,14 +333,31 @@ const WindowManager = {
     },
 
     // 打开应用
-    openApp: function (appElement) {
-        const appName = appElement.find('span').text();
-        const appUrl = appElement.data('appurl');
-        const appDataName = appElement.data('name');
+    openApp: function (input) {
+        let appName = '';
+        let appUrl = '';
+        let appId = '';
+        let appIcon = '';
+
+        // 判断输入类型
+        if (input instanceof jQuery || input.nodeType === 1) {
+            // 处理DOM元素
+            const $element = $(input);
+            appName = $element.find('span').text();
+            appUrl = $element.data('appurl');
+            appId = $element.data('name');
+            appIcon = $element.data('icon') || $element.find('img').attr('src') || '';
+        } else if (typeof input === 'object') {
+            // 处理对象参数
+            appName = input.name || '';
+            appUrl = input.url || '';
+            appId = input.id || '';
+            appIcon = input.icon || '';
+        }
 
         // 标准化应用名称
-        const normalizedAppName = appDataName ?
-            appDataName.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ') :
+        const normalizedAppName = appId ?
+            appId.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ') :
             appName;
 
         // 检查是否已经打开
@@ -361,9 +380,11 @@ const WindowManager = {
             title: normalizedAppName,
             url: appUrl,
             appName: normalizedAppName,
+            icon: appIcon,
             width: '800px',
             height: '600px'
         });
-    },
+    }
 };
-WindowManager.init();
+
+export { WindowManager }

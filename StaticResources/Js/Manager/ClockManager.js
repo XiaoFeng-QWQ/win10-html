@@ -1,3 +1,5 @@
+"use strict";
+
 /**
  * 时钟管理器组件
  */
@@ -260,5 +262,4 @@ const ClockManager = {
     }
 };
 
-// 初始化时钟管理器
-ClockManager.init();
+export { ClockManager };

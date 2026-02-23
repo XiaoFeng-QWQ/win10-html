@@ -1,3 +1,9 @@
+'use strict'
+
+import { WindowManager } from "./WindowManager.js";
+import { ClockManager } from "./ClockManager.js";
+import { StartMenuManager } from "./StartMenuManager.js";
+
 /**
  * 桌面管理器
  */
@@ -80,6 +86,9 @@ const DesktopManager = {
                 }
             }
         );
+
+        StartMenuManager.init();
+        ClockManager.init()
     },
 
     handleDesktopMouseDown: function (e) {
@@ -369,7 +378,4 @@ const DesktopManager = {
     },
 };
 
-// 初始化桌面
-$(document).ready(function () {
-    DesktopManager.init();
-});
+export { DesktopManager }

@@ -90,7 +90,7 @@
             <div class="selection-box" id="selectionBox"></div>
 
             <div class="desktop-icons">
-                <div class="desktop-icon" draggable="true" data-name="this-pc">
+                <div class="desktop-icon" draggable="true" data-name="this-pc" data-appurl="app/system/this-pc.html">
                     <img src="StaticResources/Icons/shell32_16.ico" alt="此电脑">
                     <span>此电脑</span>
                 </div>
@@ -149,7 +149,7 @@
                     <img src="StaticResources/Icons/icons8-audio-96.png" alt="音量">
                 </div>
                 <div class="win-tray-icon">
-                    <img src="StaticResources/Icons/icons8-有线网络连接-64.png" alt="网络">
+                    <img src="StaticResources/Icons/6201.ico" alt="网络">
                 </div>
                 <div id="win-clock" class="win-clock">
                     <div class="win-time">00:00</div>
@@ -182,11 +182,7 @@
     <script src="StaticResources/Js/jquery-3.7.1.min.js"></script>
     <script src="StaticResources/Js/jquery-ui.min.js"></script>
 
-    <script src="StaticResources/Js/Manager/ClockManager.js"></script>
-    <script src="StaticResources/Js/Manager/ContextMenuManager.js"></script>
-    <script src="StaticResources/Js/Manager/DesktopManager.js"></script>
-    <script src="StaticResources/Js/Manager/StartMenuManager.js"></script>
-    <script src="StaticResources/Js/Manager/WindowManager.js"></script>
+    <script type="module" src="./StaticResources/Js/Main.js"></script>
 
     <script>
         (function () {

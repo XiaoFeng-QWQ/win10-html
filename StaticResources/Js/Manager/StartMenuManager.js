@@ -1,3 +1,7 @@
+"use strict";
+
+import { MessageBoxManager } from "./MessageBoxManager.js";
+
 /**
  * 开始菜单管理器组件
  */
@@ -30,13 +34,7 @@ const StartMenuManager = {
         // 导航项点击事件
         $('.win-nav-item').click(function () {
             const text = $(this).find('.win-nav-item-text').text();
-            alert(`你点击了: ${text}`);
-        });
-
-        // 应用项点击事件
-        $('.win-app-item, .win-tile').click(function () {
-            const appName = $(this).find('div').text();
-            alert(`启动应用: ${appName}`);
+            MessageBoxManager.info(text, '功能尚未实现')
         });
     },
 
@@ -54,9 +52,15 @@ const StartMenuManager = {
             $appList.append(`
                 <div class="win-app-item">
                     <img src="${app.icon}" alt="${app.name}">
-                    <div>${app.name}</div>
+                    <p>${app.name}</p>
                 </div>
             `);
+        });
+
+        // 应用项点击事件
+        $('.win-app-item').click(function () {
+            const appName = $(this).find('p').text();
+            alert(`启动应用: ${appName}`);
         });
     },
 
@@ -80,4 +84,5 @@ const StartMenuManager = {
         });
     }
 };
-StartMenuManager.init();
+
+export { StartMenuManager }

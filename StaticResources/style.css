@@ -265,7 +265,7 @@ body {
         opacity 0.2s ease-out,
         transform 0.2s ease-out,
         padding 0.3s cubic-bezier(0.1, 0.9, 0.2, 1);
-    z-index: 1001;
+    z-index: 114514;
     border: 1px solid var(--win-border);
     border-bottom: none;
     width: 350px;
@@ -493,7 +493,7 @@ body {
     -webkit-backdrop-filter: blur(var(--acrylic-blur));
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
     overflow: hidden;
-    z-index: 999;
+    z-index: 114514;
     transform-origin: bottom left;
     opacity: 0;
     transition: max-height 0.3s;
@@ -737,6 +737,7 @@ body {
     display: flex;
     gap: 4px;
     height: 100%;
+    overflow: hidden;
 }
 
 .win-taskbar-item {
@@ -793,8 +794,578 @@ body {
     z-index: 10000 !important;
 }
 
+/* 消息框样式 */
+.win-message-box {
+    min-width: 400px;
+    max-width: 500px;
+    background-color: var(--win-panel);
+    box-shadow: 0 16px 32px rgba(0, 0, 0, 0.2);
+    border: 1px solid var(--win-border);
+    display: flex;
+    flex-direction: column;
+    border-radius: 0;
+    position: absolute;
+    z-index: 1000000;
+    will-change: transform, opacity, box-shadow;
+    /* 确保动画流畅 */
+    backface-visibility: hidden;
+    -webkit-font-smoothing: antialiased;
+}
+
+.win-message-box-titlebar {
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: move;
+    user-select: none;
+    border-bottom: 1px solid var(--win-border);
+}
+
+.win-message-box-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+}
+
+.win-message-box-title img {
+    width: 20px;
+    height: 20px;
+}
+
+.win-message-box-close {
+    background: none;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    color: var(--win-text-primary);
+    padding: 4px 8px;
+    line-height: 1;
+}
+
+.win-message-box-close:hover {
+    background-color: var(--win-hover);
+}
+
+.win-message-box-content {
+    padding: 24px 20px;
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    min-height: 80px;
+}
+
+.win-message-box-icon {
+    flex-shrink: 0;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.win-message-box-icon img {
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
+}
+
+.win-message-box-text {
+    flex: 1;
+    line-height: 1.6;
+    word-break: break-word;
+    font-size: 14px;
+}
+
+.win-message-box-buttons {
+    padding: 16px 20px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    border-top: 1px solid var(--win-border);
+}
+
+.win-message-box-button {
+    min-width: 80px;
+    padding: 6px 16px;
+    background-color: transparent;
+    border: 1px solid var(--win-border);
+    color: var(--win-text-primary);
+    cursor: pointer;
+    font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+    font-size: 14px;
+    transition: background-color 0.2s;
+}
+
+.win-message-box-button:hover {
+    background-color: var(--win-hover);
+}
+
+.win-message-box-button:active {
+    background-color: var(--win-pressed);
+}
+
+.win-message-box-button.primary {
+    background-color: var(--win-accent);
+    border-color: var(--win-accent);
+    color: white;
+}
+
+.win-message-box-button.primary:hover {
+    background-color: #005a9e;
+}
+
+/* 不同消息类型的图标颜色 */
+.win-message-box-icon.info {
+    color: var(--win-accent);
+}
+
+.win-message-box-icon.warning {
+    color: #ff8c00;
+}
+
+.win-message-box-icon.error {
+    color: #c42b1c;
+}
+
+.win-message-box-icon.success {
+    color: #107c10;
+}
+
+.win-message-box-icon.question {
+    color: var(--win-accent);
+}
+
+/* 查找/替换对话框样式 */
+.find-dialog,
+.replace-dialog {
+    padding: 15px;
+}
+
+.find-dialog-row,
+.replace-dialog-row {
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.find-dialog-row label,
+.replace-dialog-row label {
+    width: 80px;
+    text-align: right;
+    font-size: 14px;
+}
+
+.find-input,
+.replace-input {
+    flex: 1;
+    padding: 5px 8px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    font-size: 14px;
+}
+
+.find-input:focus,
+.replace-input:focus {
+    outline: none;
+    border-color: #0078d4;
+    box-shadow: 0 0 0 2px rgba(0, 120, 212, 0.3);
+}
+
+.find-dialog-options,
+.replace-dialog-options {
+    margin-left: 90px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.find-option {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 13px;
+    cursor: default;
+}
+
+.find-option input[type="checkbox"],
+.find-option input[type="radio"] {
+    margin: 0;
+    cursor: default;
+}
+
+/* 替换对话框按钮样式 */
+#find-next-btn,
+#replace-all-btn {
+    margin: 0 5px;
+}
+
+/* style.css - 添加在文件末尾 */
+
+/* ===== 全局滚动条样式 ===== */
+::-webkit-scrollbar {
+    width: 12px;
+    height: 12px;
+    background-color: transparent;
+}
+
+::-webkit-scrollbar-track {
+    background-color: rgba(0, 0, 0, 0.05);
+    border-radius: 0;
+    border-left: 1px solid var(--win-border);
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 0;
+    border: 2px solid transparent;
+    background-clip: padding-box;
+    transition: background-color 0.2s;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(0, 0, 0, 0.3);
+}
+
+::-webkit-scrollbar-thumb:active {
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+::-webkit-scrollbar-corner {
+    background-color: transparent;
+}
+
+/* 火狐浏览器滚动条样式 */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0, 0, 0, 0.2) rgba(0, 0, 0, 0.05);
+}
+
+/* ===== 亮色主题滚动条 ===== */
+@media (prefers-color-scheme: light) {
+    ::-webkit-scrollbar-track {
+        background-color: #f0f0f0;
+        border-left: 1px solid #d9d9d9;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background-color: #c0c0c0;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+        background-color: #a0a0a0;
+    }
+
+    ::-webkit-scrollbar-thumb:active {
+        background-color: #808080;
+    }
+}
+
+/* ===== 开始菜单专用滚动条 ===== */
+#win-start-menu::-webkit-scrollbar {
+    width: 8px;
+}
+
+#win-start-menu::-webkit-scrollbar-track {
+    background-color: transparent;
+    border-left: none;
+}
+
+#win-start-menu::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.15);
+    border-radius: 4px;
+    border: 2px solid transparent;
+}
+
+#win-start-menu::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(0, 0, 0, 0.25);
+}
+
+/* ===== 时钟面板专用滚动条 ===== */
+.win-clock-panel::-webkit-scrollbar {
+    width: 6px;
+}
+
+.win-clock-panel::-webkit-scrollbar-track {
+    background-color: transparent;
+}
+
+.win-clock-panel::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.15);
+    border-radius: 3px;
+}
+
+/* ===== 右键菜单滚动条 ===== */
+.win-context-menu::-webkit-scrollbar {
+    width: 4px;
+}
+
+.win-context-menu::-webkit-scrollbar-track {
+    background-color: transparent;
+}
+
+.win-context-menu::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.1);
+    border-radius: 2px;
+}
+
+.win-context-menu::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
+/* ===== 消息框滚动条 ===== */
+.win-message-box-content::-webkit-scrollbar {
+    width: 8px;
+}
+
+.win-message-box-content::-webkit-scrollbar-track {
+    background-color: transparent;
+}
+
+.win-message-box-content::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.15);
+    border-radius: 4px;
+}
+
+/* ===== 应用窗口滚动条 ===== */
+.win-window-content::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+.win-window-content::-webkit-scrollbar-track {
+    background-color: #f5f5f5;
+    border-left: 1px solid var(--win-border);
+}
+
+.win-window-content::-webkit-scrollbar-thumb {
+    background-color: #c1c1c1;
+    border-radius: 0;
+    border: 2px solid transparent;
+    background-clip: padding-box;
+}
+
+.win-window-content::-webkit-scrollbar-thumb:hover {
+    background-color: #a1a1a1;
+}
+
+/* ===== 导航视图专用滚动条 ===== */
+.win-nav-view::-webkit-scrollbar {
+    width: 0px;
+    /* 导航栏默认隐藏滚动条，保持简洁 */
+    background: transparent;
+}
+
+.win-nav-view:hover::-webkit-scrollbar {
+    width: 6px;
+}
+
+.win-nav-view::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 3px;
+}
+
+/* ===== 文件列表滚动条（此电脑） ===== */
+.file-list::-webkit-scrollbar {
+    width: 12px;
+}
+
+.file-list::-webkit-scrollbar-track {
+    background-color: #f5f5f5;
+    border-left: 1px solid var(--win-border);
+}
+
+.file-list::-webkit-scrollbar-thumb {
+    background-color: #c1c1c1;
+    border: 2px solid #f5f5f5;
+    border-radius: 6px;
+}
+
+.file-list::-webkit-scrollbar-thumb:hover {
+    background-color: #a1a1a1;
+}
+
+/* ===== 应用列表滚动条 ===== */
+.win-app-list::-webkit-scrollbar {
+    width: 8px;
+}
+
+.win-app-list::-webkit-scrollbar-track {
+    background-color: transparent;
+}
+
+.win-app-list::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.15);
+    border-radius: 4px;
+}
+
+/* ===== 磁贴区域滚动条 ===== */
+#win-magneticPatch::-webkit-scrollbar {
+    width: 8px;
+}
+
+#win-magneticPatch::-webkit-scrollbar-track {
+    background-color: transparent;
+}
+
+#win-magneticPatch::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.15);
+    border-radius: 4px;
+}
+
+/* ===== 导航侧边栏滚动条（此电脑） ===== */
+.navigation-pane::-webkit-scrollbar {
+    width: 8px;
+}
+
+.navigation-pane::-webkit-scrollbar-track {
+    background-color: #f5f5f5;
+    border-left: 1px solid var(--win-border);
+}
+
+.navigation-pane::-webkit-scrollbar-thumb {
+    background-color: #c1c1c1;
+    border-radius: 4px;
+    border: 2px solid #f5f5f5;
+}
+
+/* ===== 隐藏滚动条但保持功能（适用于特定场景） ===== */
+.scrollable-hidden-scrollbar {
+    overflow-y: auto;
+    scrollbar-width: none;
+    /* Firefox */
+    -ms-overflow-style: none;
+    /* IE/Edge */
+}
+
+.scrollable-hidden-scrollbar::-webkit-scrollbar {
+    display: none;
+    /* Chrome/Safari/Opera */
+}
+
+/* ===== 自定义滚动条容器 ===== */
+.custom-scrollbar {
+    overflow-y: auto;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+    width: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+    background-color: #f0f0f0;
+    border-radius: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background: linear-gradient(45deg, #888, #666);
+    border-radius: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(45deg, #666, #444);
+}
+
+/* ===== Windows 11 风格滚动条 ===== */
+.win11-scrollbar::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+.win11-scrollbar::-webkit-scrollbar-track {
+    background-color: transparent;
+}
+
+.win11-scrollbar::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+    border: 2px solid transparent;
+    background-clip: content-box;
+}
+
+.win11-scrollbar::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+.win11-scrollbar::-webkit-scrollbar-thumb:active {
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+/* ===== 毛玻璃效果滚动条（配合丙烯酸效果） ===== */
+.acrylic-effect::-webkit-scrollbar-track {
+    background-color: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+}
+
+.acrylic-effect::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+.acrylic-effect::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(255, 255, 255, 0.4);
+}
+
+/* ===== 暗色主题滚动条 ===== */
+@media (prefers-color-scheme: dark) {
+    ::-webkit-scrollbar-track {
+        background-color: #2d2d2d;
+        border-left: 1px solid #3d3d3d;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background-color: #5a5a5a;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+        background-color: #6a6a6a;
+    }
+
+    ::-webkit-scrollbar-thumb:active {
+        background-color: #7a7a7a;
+    }
+
+    /* 暗色主题下的其他滚动条 */
+    .win-window-content::-webkit-scrollbar-track {
+        background-color: #2d2d2d;
+        border-left: 1px solid #3d3d3d;
+    }
+
+    .win-window-content::-webkit-scrollbar-thumb {
+        background-color: #5a5a5a;
+    }
+
+    .file-list::-webkit-scrollbar-track {
+        background-color: #2d2d2d;
+        border-left: 1px solid #3d3d3d;
+    }
+
+    .file-list::-webkit-scrollbar-thumb {
+        background-color: #5a5a5a;
+        border: 2px solid #2d2d2d;
+    }
+}
+
 /* 响应式调整 */
 @media (max-width: 768px) {
+    ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+    }
+
+    .win-window-content::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+    }
+
+    .file-list::-webkit-scrollbar {
+        width: 8px;
+    }
+
     #win-start-menu {
         width: 100%;
         grid-template-columns: 48px 1fr;

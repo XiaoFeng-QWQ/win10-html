@@ -1,3 +1,5 @@
+'use strict'
+
 /**
  * 右键菜单管理器
  */
@@ -328,4 +330,5 @@ const ContextMenuManager = {
         alert(`${iconName} 属性`);
     }
 };
-ContextMenuManager.init();
+
+export { ContextMenuManager }
