@@ -42,8 +42,8 @@ const StartMenuManager = {
     initAppList: function () {
         // 模拟应用列表数据
         const apps = [
-            { name: "Microsoft Edge", icon: "StaticResources/Icons/icons8-ms-边缘-新.svg" },
-            { name: "Microsoft Store", icon: "StaticResources/Icons/icons8-microsoft-store-96.png" },
+            { name: "Microsoft Edge", icon: "/StaticResources/Icons/icons8-ms-边缘-新.svg" },
+            { name: "Microsoft Store", icon: "/StaticResources/Icons/icons8-microsoft-store-96.png" },
         ];
 
         // 渲染应用列表
@@ -68,8 +68,8 @@ const StartMenuManager = {
     initTiles: function () {
         // 模拟磁贴数据
         const tiles = [
-            { name: "Microsoft Edge", icon: "StaticResources/Icons/icons8-ms-边缘-新.svg", size: "wide" },
-            { name: "Microsoft Store", icon: "StaticResources/Icons/icons8-microsoft-store-96.png", size: "wide" },
+            { name: "Microsoft Edge", icon: "/StaticResources/Icons/icons8-ms-边缘-新.svg", size: "wide" },
+            { name: "Microsoft Store", icon: "/StaticResources/Icons/icons8-microsoft-store-96.png", size: "wide" },
         ];
 
         // 渲染磁贴
