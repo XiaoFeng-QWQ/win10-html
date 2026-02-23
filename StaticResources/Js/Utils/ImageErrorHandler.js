@@ -1,7 +1,7 @@
 "use strict";
 
 const ImageErrorHandler = {
-    defaultIcon: '/StaticResources/Icons/15.ico',
+    defaultIcon: '/StaticResources/Icons/shell32_1.ico',
 
     init: function () {
         this.setupGlobalHandler();
